@@ -1,0 +1,7 @@
+apiVersion: kapp.kappa.io/v1alpha1
+kind: Environment
+metadata:
+  name: environment-sample
+spec:
+  # Add fields here
+  foo: bar

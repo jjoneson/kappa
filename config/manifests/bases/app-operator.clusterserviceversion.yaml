@@ -1,0 +1,47 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+  name: kappa.v0.0.0
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions:
+    owned:
+    - description: App is the Schema for the apps API
+      displayName: App
+      kind: App
+      name: apps.kapp.kappa.io
+      version: v1alpha1
+  description: Generic App Operator
+  displayName: kappa
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments: null
+    strategy: ""
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - apps
+  links:
+  - name: App Operator
+    url: https://kappa.domain
+  maintainers:
+  - email: joneson.jeff@gmail.com
+    name: jjoneson
+  maturity: alpha
+  provider:
+    name: kappa
+  version: 0.0.0

@@ -1,0 +1,1 @@
+A simple, generic operator for applications using the operator SDK.

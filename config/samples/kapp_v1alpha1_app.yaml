@@ -1,0 +1,7 @@
+apiVersion: kapp.kappa.io/v1alpha1
+kind: App
+metadata:
+  name: app-sample
+spec:
+  # Add fields here
+  image: nginxinc/nginx-unprivileged
