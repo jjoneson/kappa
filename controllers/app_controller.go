@@ -71,6 +71,20 @@ func (r *AppReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 		return res, err
 	}
 
+	res, err = r.reconcileService(ctx, req, app)
+	if err != nil {
+		return res, err
+	}
+	res, err = r.reconcileVirtualService(ctx, req, app)
+	if err != nil {
+		return res, err
+	}
+
+	res, err = r.reconcileDestinationRule(ctx, req, app)
+	if err != nil {
+		return res, err
+	}
+
 	return ctrl.Result{}, nil
 }
 
@@ -80,10 +94,10 @@ func (r *AppReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		For(&kappv1alpha1.App{}).
 		Owns(&appsv1.Deployment{}).
 		Owns(&corev1.Service{}).
+		Owns(&corev1.ServiceAccount{}).
 		Owns(&rbacv1.Role{}).
 		Owns(&rbacv1.RoleBinding{}).
 		Owns(&istio.VirtualService{}).
 		Owns(&istio.DestinationRule{}).
-		Owns(&corev1.ServiceAccount{}).
 		Complete(r)
 }

@@ -7,6 +7,7 @@ require (
 	github.com/onsi/ginkgo v1.14.1
 	github.com/onsi/gomega v1.10.2
 	github.com/prometheus/common v0.10.0
+	istio.io/api v0.0.0-20210318170531-e6e017e575c5
 	istio.io/client-go v1.9.2
 	k8s.io/api v0.20.1
 	k8s.io/apimachinery v0.20.1
