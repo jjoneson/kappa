@@ -8,13 +8,15 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
 func (r *AppReconciler) reconcileServiceAccount(ctx context.Context, req ctrl.Request, app *kappv1alpha1.App) (ctrl.Result, error) {
 	found := &corev1.ServiceAccount{}
 	desired := r.serviceAccount(app)
+	err := controllerutil.SetControllerReference(app, desired, r.Scheme)
 
-	err := r.Get(ctx, types.NamespacedName{Name: app.Name, Namespace: app.Namespace}, found)
+	err = r.Get(ctx, types.NamespacedName{Name: app.Name, Namespace: app.Namespace}, found)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			if err = r.Create(ctx, desired); err != nil {
@@ -27,10 +29,12 @@ func (r *AppReconciler) reconcileServiceAccount(ctx context.Context, req ctrl.Re
 		}
 	}
 
-	desired.DeepCopyInto(found)
-	r.Log.Info("Updating ServiceAccount", "Name", app.Name, "Namespace", app.Namespace)
-	if err := r.Update(ctx, found); err != nil {
-		return ctrl.Result{}, err
+	if !mapMatch(desired.Labels, found.Labels) || !mapMatch(desired.Annotations, found.Annotations) {
+		desired.DeepCopyInto(found)
+		r.Log.Info("Updating ServiceAccount", "Name", app.Name, "Namespace", app.Namespace)
+		if err := r.Update(ctx, found); err != nil {
+			return ctrl.Result{Requeue: true}, err
+		}
 	}
 
 	return ctrl.Result{}, nil
